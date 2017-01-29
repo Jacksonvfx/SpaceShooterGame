@@ -5,6 +5,7 @@ var enemyShipExplosion01 : Transform;
 
 var colors = new Color[2];
 
+var coin:GameObject;
 
 function OnCollisionEnter(bullet : Collision) {
     if(bullet.gameObject.tag == "PowerBullet")
@@ -29,6 +30,10 @@ function Update() {
         var effect = Instantiate(enemyShipExplosion01, transform.position, transform.rotation);
         Destroy(transform.parent.gameObject);
         GameMaster.currentScore += 10;
+        if(Random.value>0.9)
+        {
+            Instantiate(coin, transform.position,transform.rotation);
+        }
     }
 }
 
