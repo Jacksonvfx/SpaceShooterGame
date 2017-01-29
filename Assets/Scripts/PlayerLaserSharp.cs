@@ -25,7 +25,7 @@ public class PlayerLaserSharp : MonoBehaviour
             StopCoroutine("FireLaser");
             StartCoroutine("FireLaser");
         } else {
-            Destroy(laserCollider);
+            //Destroy(laserCollider);
         }
     }
     IEnumerator FireLaser()
@@ -46,20 +46,11 @@ public class PlayerLaserSharp : MonoBehaviour
                 {
                     hit.collider.gameObject.SendMessage("TakeDamage", 1);
                     line.SetPosition(1, hit.point);
-                    if (hit.rigidbody && hit.rigidbody.tag == "Enemy")
-                    {
-                        if (laserCollider == null)
-                        {
-                            laserCollider = Instantiate(PlayerLaserCollider) as GameObject;
-                            laserCollider.transform.parent = this.transform;
-                            laserCollider.transform.localPosition = Vector2.zero;
-                            laserCollider.transform.position = hit.point;
-                            Instantiate(coinEffect, hit.transform.position, hit.transform.rotation);
-                        }
-                    }
-                }
-                if (hit.collider == null) {
-                    Destroy(laserCollider);
+		    IEnumerator coroutine;
+		    Transform effect = Instantiate(coinEffect, hit.transform.position, hit.transform.rotation);
+		    coroutine = KillEffectAfterTime(effect.gameObject);
+		    StartCoroutine(coroutine);
+			//}
                 }
             }
             else
@@ -68,5 +59,13 @@ public class PlayerLaserSharp : MonoBehaviour
         }
 
         line.enabled = false;
+    }
+
+    IEnumerator KillEffectAfterTime(GameObject obj)
+    {
+	Debug.Log("About to wait for a second");
+	yield return new WaitForSeconds(1);
+	Destroy(obj);
+	Debug.Log("Waiting done!");
     }
 }
